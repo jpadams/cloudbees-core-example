@@ -2,7 +2,7 @@ podTemplate(label: 'twistlock-example-builder',
   containers: [
     containerTemplate(
       name: 'alpine',
-      image: 'twistian/alpine:latest',
+      image: 'jeremyatdockerhub/alpine-latest-docker-curl',
       command: 'cat',
       ttyEnabled: true
     ),
