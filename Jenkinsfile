@@ -1,7 +1,7 @@
 podTemplate(label: 'twistlock-example-builder', 
   containers: [
     containerTemplate(
-      name: 'alpine',
+      name: 'builder',
       image: 'jeremyatdockerhub/alpine-latest-docker',
       command: 'cat',
       ttyEnabled: true
@@ -14,10 +14,13 @@ podTemplate(label: 'twistlock-example-builder',
 {
   node ('twistlock-example-builder') {
 
-    stage ('Pull image') { 
-      container('alpine') {
+    stage ('Build image') { 
+      container('builder') {
         sh """
-        curl --unix-socket /var/run/docker.sock -X POST "http:/v1.24/images/create?fromImage=nginx:stable-alpine"
+        mkdir build
+        cd build
+        echo 'FROM alpine:latest' > Dockerfile
+        docker build -t myalpine:latest .
         """
       }
     }
@@ -29,7 +32,7 @@ podTemplate(label: 'twistlock-example-builder',
                     dockerAddress: 'unix:///var/run/docker.sock',
                     gracePeriodDays: 0,
                     ignoreImageBuildTime: true,
-                    image: 'nginx:stable-alpine',
+                    image: 'myalpine:latest',
                     key: '',
                     logLevel: 'true',
                     policy: 'warn',
@@ -42,7 +45,7 @@ podTemplate(label: 'twistlock-example-builder',
                     cert: '',
                     dockerAddress: 'unix:///var/run/docker.sock',
                     ignoreImageBuildTime: true,
-                    image: 'nginx:stable-alpine',
+                    image: 'myalpine:latest',
                     key: '',
                     logLevel: 'true',
                     timeout: 10
