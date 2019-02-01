@@ -1,7 +1,7 @@
 podTemplate(label: 'twistlock-example-builder', 
   containers: [
     containerTemplate(
-      name: 'builder',
+      name: 'build',
       image: 'docker',
       command: 'cat',
       ttyEnabled: true
@@ -15,10 +15,10 @@ podTemplate(label: 'twistlock-example-builder',
   node ('twistlock-example-builder') {
 
     stage ('Build image') { 
-      container('builder') {
+      container('build') {
         sh """
-        mkdir build
-        cd build
+        mkdir myproj
+        cd myproj
         echo 'FROM alpine:latest' > Dockerfile
         docker build -t myalpine:latest .
         """
